@@ -68,17 +68,17 @@ const ProductForm = () => {
     };
     const submitHandle = async (value) => {
         console.log(value);
-        if (value.status == -1) {
-            setError('status', { message: 'Danh mục chưa được lựa chọn' });
-        }
-        if (value.category == -1)
-            setError('category', {
-                message: 'Trạng thái của sản phẩm chưa được lựa chọn',
-            });
-        if (value.brand == -1)
-            setError('brand', { message: 'Hãng của chưa được lựa chọn' });
-        if (images.length === 0)
-            setError('images', { message: 'Chưa chọn ảnh của sản phẩm' });
+        // if (value.status == -1) {
+        //     setError('status', { message: 'Danh mục chưa được lựa chọn' });
+        // }
+        // if (value.category == -1)
+        //     setError('category', {
+        //         message: 'Trạng thái của sản phẩm chưa được lựa chọn',
+        //     });
+        // if (value.brand == -1)
+        //     setError('brand', { message: 'Hãng của chưa được lựa chọn' });
+        // if (images.length === 0)
+        //     setError('images', { message: 'Chưa chọn ảnh của sản phẩm' });
         // if (
         //     value.status == -1 ||
         //     value.category == -1 ||
@@ -87,28 +87,28 @@ const ProductForm = () => {
         //     description.current === ''
         // )
         //     return MySwal.fire('', 'Vui lòng nhập đầy đủ thông tin', 'warning');
-        else {
-            const formData = new FormData();
-            formData.append('name', value?.name ?? '');
-            formData.append('price', parseFloat(value?.price) ?? 0);
-            formData.append('discount', parseFloat(value?.discount) ?? 0);
-            formData.append('quantity', parseFloat(value?.quantity) ?? 0);
-            formData.append('brand', value?.brand ?? '');
-            formData.append('category', value?.category ?? '');
-            formData.append('status', value?.status ?? '');
-            const imagesUpload = [];
-            // images / desc
-            await Promise.all(
-                images.map(async (image) => {
-                    const res = await imgbbApis.upload(image, {
-                        name: stringToSlug(value.name),
-                    });
-                    console.log(res);
-                    imagesUpload.push(res.data);
-                })
-            );
-            console.log(imagesUpload);
-        }
+        // else {
+        const formData = new FormData();
+        formData.append('name', value?.name ?? '');
+        formData.append('price', parseFloat(value?.price) ?? 0);
+        formData.append('discount', parseFloat(value?.discount) ?? 0);
+        formData.append('quantity', parseFloat(value?.quantity) ?? 0);
+        formData.append('brand', value?.brand ?? '');
+        formData.append('category', value?.category ?? '');
+        formData.append('status', value?.status ?? '');
+        const imagesUpload = [];
+        // images / desc
+        await Promise.all(
+            images.map(async (image) => {
+                const res = await imgbbApis.upload(image, {
+                    name: stringToSlug(value.name),
+                });
+                console.log(res);
+                imagesUpload.push(res.data);
+            })
+        );
+        console.log(imagesUpload);
+        // }
     };
     return (
         <>
