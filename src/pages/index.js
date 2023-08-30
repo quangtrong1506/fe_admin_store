@@ -1,214 +1,173 @@
-import ContentHeader from "../components/_common/content/contentHeader";
-import {useState} from "react";
-import {Link} from "react-router-dom";
-import { faArrowAltCircleRight, faUsers, faNewspaper } from "@fortawesome/free-solid-svg-icons";
-import { faComments, faThumbsUp } from "@fortawesome/free-regular-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Chart from "chart.js/auto";
-import {CategoryScale} from "chart.js";
-import {Line} from "react-chartjs-2";
-
-Chart.register(CategoryScale)
-const data = [
-    {
-        year: 2019,
-        users: 80000,
-        articles: 8230,
-        comments: 10000,
-        reactions: 20000
-    },
-    {
-        year: 2020,
-        users: 100000,
-        articles: 9230,
-        comments: 20000,
-        reactions: 25000
-    },
-    {
-        year: 2021,
-        users: 102000,
-        articles: 9230,
-        comments: 25000,
-        reactions: 26000
-    },
-    {
-        year: 2022,
-        users: 120000,
-        articles: 10230,
-        comments: 30000,
-        reactions: 45000
-    },
-    {
-        year: 2023,
-        users: 150000,
-        articles: 12230,
-        comments: 45000,
-        reactions: 55000
-    },
-];
-export default function Index() {
-    const [breadcrumb] = useState([
-        {
-            title: 'Home',
-            link: '/'
-        },
-        {
-            title: 'Dashboard',
-            link: '/'
-        },
-    ])
-    const [parentTitle] = useState('DashBoard')
-    const [chartData, setChartData] = useState({
-        labels: data.map((item) => item.year),
-        datasets: [
-            {
-                label: "Users",
-                data: data.map((item) => item.users),
-                backgroundColor: [
-                    "rgba(75,192,192,1)",
-                    "#ecf0f1",
-                    "#50AF95",
-                    "#f3ba2f",
-                    "#2a71d0"
-                ],
-                borderColor: "black",
-                borderWidth: 2
-            },
-            {
-                label: "Bài viết",
-                data: data.map((item) => item.articles),
-                backgroundColor: [
-                    "rgba(75,192,192,1)",
-                    "#ecf0f1",
-                    "#50AF95",
-                    "#f3ba2f",
-                    "#2a71d0"
-                ],
-                borderColor: "black",
-                borderWidth: 2
-            },
-            {
-                label: "Bình luận",
-                data: data.map((item) => item.comments),
-                backgroundColor: [
-                    "rgba(75,192,192,1)",
-                    "#ecf0f1",
-                    "#50AF95",
-                    "#f3ba2f",
-                    "#2a71d0"
-                ],
-                borderColor: "black",
-                borderWidth: 2
-            },
-            {
-                label: "Tương tác",
-                data: data.map((item) => item.reactions),
-                backgroundColor: [
-                    "rgba(75,192,192,1)",
-                    "#ecf0f1",
-                    "#50AF95",
-                    "#f3ba2f",
-                    "#2a71d0"
-                ],
-                borderColor: "black",
-                borderWidth: 2
-            },
-        ]
-    });
+import { memo, useEffect } from 'react';
+import {
+    FaBagShopping,
+    FaDatabase,
+    FaTriangleExclamation,
+    FaUsers,
+} from 'react-icons/fa6';
+import { useDispatch } from 'react-redux';
+import { setNavigationValue } from '../features/navigation/navigationSlice';
+const Index = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(setNavigationValue([{ url: '/', title: 'Bảng điều khiểu' }]));
+    }, []);
     return (
         <>
-            <ContentHeader breadcrumb={breadcrumb} title={parentTitle}/>
-            <section className={'content'}>
-                <div className={'container-fluid'}>
-                    <div className={'row'}>
-                        <div className={"col-lg-3 col-6"}>
-                            <div className="small-box bg-info text-white">
-                                <div className="inner">
-                                    <h3>150</h3>
-                                    <p>Users</p>
+            <div className="row">
+                <div className="col-md-12 col-lg-12">
+                    <div className="row">
+                        <div className="col-md-12 col-lg-6">
+                            <div className="widget-small primary coloured-icon">
+                                <i
+                                    className="icon"
+                                    style={{ backgroundColor: '#b9ffd3' }}
+                                >
+                                    <FaUsers className="" />
+                                </i>
+                                <div className="info">
+                                    <h4>Tổng khách hàng</h4>
+                                    <p>
+                                        <b>2 khách hàng</b>
+                                    </p>
+                                    <p className="info-tong">
+                                        Tổng số khách hàng được quản lý.
+                                    </p>
                                 </div>
-                                <div className="icon">
-                                    <FontAwesomeIcon icon={faUsers}/>
-                                </div>
-                                <Link to={"/"} className={'small-box-footer'}>
-                                    More info
-                                    <FontAwesomeIcon icon={faArrowAltCircleRight} className={"ms-1"}/>
-                                </Link>
                             </div>
                         </div>
-                        <div className={"col-lg-3 col-6"}>
-                            <div className="small-box bg-success text-white">
-                                <div className="inner">
-                                    <h3>150</h3>
-                                    <p>Bài viết</p>
+                        <div className="col-md-12 col-lg-6">
+                            <div className="widget-small info coloured-icon">
+                                <i className="icon">
+                                    <FaDatabase />
+                                </i>
+                                <div className="info">
+                                    <h4>Tổng sản phẩm</h4>
+                                    <p>
+                                        <b>2 sản phẩm</b>
+                                    </p>
+                                    <p className="info-tong">
+                                        Tổng số sản phẩm được quản lý.
+                                    </p>
                                 </div>
-                                <div className="icon">
-                                    <FontAwesomeIcon icon={faNewspaper}/>
-                                </div>
-                                <Link to={"/"} className={'small-box-footer'}>
-                                    More info
-                                    <FontAwesomeIcon icon={faArrowAltCircleRight} className={"ms-1"}/>
-                                </Link>
                             </div>
                         </div>
-                        <div className={"col-lg-3 col-6"}>
-                            <div className="small-box bg-warning text-white">
-                                <div className="inner">
-                                    <h3>150</h3>
-                                    <p>Bình luận</p>
+                        <div className="col-md-12 col-lg-6">
+                            <div className="widget-small warning coloured-icon">
+                                <i className="icon">
+                                    <FaBagShopping />
+                                </i>
+                                <div className="info">
+                                    <h4>Tổng đơn hàng</h4>
+                                    <p>
+                                        <b>2 đơn hàng</b>
+                                    </p>
+                                    <p className="info-tong">
+                                        Tổng số hóa đơn đã bán.
+                                    </p>
                                 </div>
-                                <div className="icon">
-                                    <FontAwesomeIcon icon={faComments}/>
-                                </div>
-                                <Link to={"/"} className={'small-box-footer'}>
-                                    More info
-                                    <FontAwesomeIcon icon={faArrowAltCircleRight} className={"ms-1"}/>
-                                </Link>
                             </div>
                         </div>
-                        <div className={"col-lg-3 col-6"}>
-                            <div className="small-box bg-danger text-white">
-                                <div className="inner">
-                                    <h3>150</h3>
-                                    <p>Tương tác</p>
+                        <div className="col-md-12 col-lg-6">
+                            <div className="widget-small danger coloured-icon">
+                                <i className="icon">
+                                    <FaTriangleExclamation />
+                                </i>
+                                <div className="info">
+                                    <h4>Sắp hết hàng</h4>
+                                    <p>
+                                        <b>1 sản phẩm</b>
+                                    </p>
+                                    <p className="info-tong">
+                                        Số sản phẩm cảnh báo hết cần nhập thêm.
+                                    </p>
                                 </div>
-                                <div className="icon">
-                                    <FontAwesomeIcon icon={faThumbsUp}/>
-                                </div>
-                                <Link to={"/"} className={'small-box-footer'}>
-                                    More info
-                                    <FontAwesomeIcon icon={faArrowAltCircleRight} className={"ms-1"}/>
-                                </Link>
                             </div>
                         </div>
-                    </div>
-                    <div className={'row'}>
-                        <div className={"col-12 mb-3"}>
-                            <h3>
-                                Biểu đồ tổng quát
-                            </h3>
-                            <form className={"row"}>
-                                <div className={"col-4"}>
-                                    <select className="form-select" aria-label="Default select example">
-                                        <option value="1">Theo năm</option>
-                                        <option value="2">Theo tháng</option>
-                                    </select>
+                        <div className="col-md-12">
+                            <div className="tile">
+                                <h3 className="tile-title">Đơn hàng mới</h3>
+                                <div>
+                                    <table className="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>ID đơn hàng</th>
+                                                <th>Tên khách hàng</th>
+                                                <th>Tổng tiền</th>
+                                                <th>Trạng thái</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>#rlzv3tiZ</td>
+                                                <td>Lương Quang Trọng</td>
+                                                <td>1.131.567&nbsp;₫</td>
+                                                <td>
+                                                    <span className="badge bg-info">
+                                                        Chờ xác nhận
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>#fcx8tGa2</td>
+                                                <td>lương quang trọng</td>
+                                                <td>1.131.456&nbsp;₫</td>
+                                                <td>
+                                                    <span className="badge bg-success">
+                                                        Hoàn thành
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div className={"col-2"}>
-                                    <input type="text" className="form-control" placeholder="từ" />
-                                </div>
-                                <div className={"col-2"}>
-                                    <input type="text" className="form-control" placeholder="đến" />
-                                </div>
-                            </form>
+                            </div>
                         </div>
-                        <Line
-                            data={chartData}
-                            className={"col-12"}
-                        />
+                        <div className="col-md-12">
+                            <div className="tile">
+                                <h3 className="tile-title">Khách hàng mới</h3>
+                                <div>
+                                    <table className="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Tên khách hàng</th>
+                                                <th>Email</th>
+                                                <th>Số điện thoại</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>#1c9u78Cf</td>
+                                                <td>Lương Quang Trọng</td>
+                                                <td>
+                                                    quangtrong1506@gmail.com
+                                                </td>
+                                                <td>
+                                                    <span className="tag tag-success">
+                                                        0389619050
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>#Qj0Y4vMQ</td>
+                                                <td>lương quang trọng</td>
+                                                <td>quangtrong2@gmail.com</td>
+                                                <td>
+                                                    <span className="tag tag-success">
+                                                        089619050
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
         </>
-    )
-}
+    );
+};
+export default memo(Index);

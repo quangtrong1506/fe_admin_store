@@ -1,16 +1,19 @@
 import { useEffect } from 'react';
-import { FaPlus } from 'react-icons/fa6';
+import { FaPenToSquare, FaPlus, FaTrash } from 'react-icons/fa6';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import CustomPagination from '../../components/customPagination';
 import { setNavigationValue } from '../../features/navigation/navigationSlice';
 const userIndexSwal = withReactContent(Swal);
-export default function UserIndex() {
+export default function ProductIndex() {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(
-            setNavigationValue([{ url: '/users', title: 'Quản lý Users' }])
+            setNavigationValue([
+                { url: '/products', title: 'Quản lý sản phẩm' },
+            ])
         );
     }, [dispatch]);
     return (
@@ -21,14 +24,14 @@ export default function UserIndex() {
                         <div className="tile-body">
                             <div className="row element-button">
                                 <div className="col-sm-2">
-                                    <a
+                                    <Link
                                         className="btn btn-add btn-sm"
-                                        href="them-nhan-vien"
+                                        to="/products/new"
                                         title="Thêm"
                                     >
                                         <FaPlus className="icon fa" />
-                                        Thêm user
-                                    </a>
+                                        Thêm sản phẩm
+                                    </Link>
                                 </div>
                             </div>
                             <div>
@@ -49,28 +52,29 @@ export default function UserIndex() {
                                                         width="180"
                                                         className="text-center"
                                                     >
-                                                        Họ & Tên
+                                                        Title
                                                     </th>
                                                     <th
                                                         scope="col"
                                                         width="80"
                                                         className="text-center"
                                                     >
-                                                        Avatar
+                                                        Thumbnail
                                                     </th>
                                                     <th
                                                         scope="col"
-                                                        width="120"
+                                                        width="150"
                                                         className="text-center"
                                                     >
-                                                        Số điện thoại / email
+                                                        Price / Discount percent
                                                     </th>
                                                     <th
                                                         scope="col"
                                                         className="text-center"
                                                     >
-                                                        Địa chỉ
+                                                        Status
                                                     </th>
+                                                    <th scope="col">Brand</th>
                                                     <th scope="col" width="60">
                                                         Handle
                                                     </th>
@@ -94,18 +98,52 @@ export default function UserIndex() {
                                                             />
                                                         </div>
                                                     </td>
-                                                    <td width="120">
-                                                        <ul className="list-group">
+                                                    <td width="150">
+                                                        <ul className="list-group list-group-flush">
                                                             <li className="list-group-item">
-                                                                09876543211
+                                                                100.000 đ
                                                             </li>
                                                             <li className="list-group-item">
-                                                                sadoa111@gmail.com
+                                                                10%
                                                             </li>
                                                         </ul>
                                                     </td>
-                                                    <td>Số nhà: 1</td>
-                                                    <td></td>
+                                                    <td>
+                                                        <ul className="list-group list-group-flush">
+                                                            <li className="list-group-item">
+                                                                Amount: 199
+                                                            </li>
+                                                            <li className="list-group-item">
+                                                                Status:{' '}
+                                                                <span className="text-danger">
+                                                                    Đang giảm
+                                                                    giá
+                                                                </span>
+                                                                ,{' '}
+                                                                <span className="text-warning">
+                                                                    Sắp hết hàng
+                                                                </span>
+                                                            </li>
+                                                            <li className="list-group-item">
+                                                                Rating: 4.6
+                                                            </li>
+                                                        </ul>
+                                                    </td>
+                                                    <td>Samsung</td>
+                                                    <td>
+                                                        <button
+                                                            className="btn btn-light"
+                                                            type="button"
+                                                        >
+                                                            <FaPenToSquare />
+                                                        </button>
+                                                        <button
+                                                            className="btn btn-light"
+                                                            type="button"
+                                                        >
+                                                            <FaTrash />
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>

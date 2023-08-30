@@ -1,79 +1,88 @@
-import Navigation from "../components/_common/navigation/navigation";
-import MainSidebar from "../components/_common/mainSidebar/mainSidebar";
-import MainFooter from "../components/_common/footer/footer";
-import {Outlet, useNavigate} from "react-router-dom";
-import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
-import {useEffect} from "react";
-import {useCookies} from "react-cookie";
-import {useDispatch, useSelector} from "react-redux";
-import {createAuthUser, initNotifications, pushNotification} from "../features/auth/authSlice";
-import profileApis from "../api/baseAdmin/profile";
-import socket from "../plugins/socketio";
-import AdminCreateNewUser from "../components/_common/notifications/adminCreateNewUser";
-import {userSelector} from "../features/auth/authSelectors";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, Outlet } from 'react-router-dom';
+import '../assets/css/more.css';
+import '../assets/css/style.css';
+import Header from '../components/_common/header/header';
+import Sidebar from '../components/_common/sidebar/sidebar';
 
 export default function Layout() {
-    const user = useSelector(userSelector);
-    const dispatch = useDispatch();
-    const [cookies, setCookie] = useCookies(['user_token']);
-    let navigate = useNavigate();
-
-    useEffect( () => {
-        const mainSocket = socket('admin');
-        mainSocket.on('admin_create_new_user', (data) => {
-            toast.info(() => <AdminCreateNewUser data={data}/>);
-            dispatch(pushNotification(data));
-        })
-
-        if (!cookies.user_token) {
-            navigate('/login');
+    function time() {
+        var today = new Date();
+        var weekday = new Array(7);
+        weekday[0] = 'Chủ Nhật';
+        weekday[1] = 'Thứ Hai';
+        weekday[2] = 'Thứ Ba';
+        weekday[3] = 'Thứ Tư';
+        weekday[4] = 'Thứ Năm';
+        weekday[5] = 'Thứ Sáu';
+        weekday[6] = 'Thứ Bảy';
+        var day = weekday[today.getDay()];
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        let nowTime = h + ' giờ ' + m + ' phút ' + s + ' giây';
+        if (dd < 10) {
+            dd = '0' + dd;
         }
-        if (!user) {
-            (
-                async () => {
-                    const profileResponse = await profileApis.show();
-
-                    if (profileResponse.success) {
-                        dispatch(createAuthUser(profileResponse.data))
-                    }
-                }
-            )()
+        if (mm < 10) {
+            mm = '0' + mm;
         }
-        profileApis.notifications()
-            .then(
-              (response) => dispatch(initNotifications(response.data))
-            )
-            .catch(
-              e => toast.error(() => e.message)
-            )
-    }, [cookies]);
-
+        today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+        let tmp = '<span class="date"> ' + today + ' - ' + nowTime + '</span>';
+        if (document.getElementById('clock'))
+            document.getElementById('clock').innerHTML = tmp;
+        function checkTime(i) {
+            if (i < 10) {
+                i = '0' + i;
+            }
+            return i;
+        }
+    }
+    useEffect(() => {
+        setInterval(time, 1000);
+    }, []);
+    const navigation = useSelector((state) => state.navigation);
+    const BreadcrumbItem = () => {
+        if (navigation) {
+            return navigation.map((element, index) => {
+                return (
+                    <span key={index}>
+                        <Link to={element.url}>
+                            <span>{element.title}</span>
+                        </Link>
+                        {index !== navigation.length - 1 && <span> / </span>}
+                    </span>
+                );
+            });
+        }
+        return <></>;
+    };
     return (
         <>
-            <div id="main" className="sidebar-mini layout-fixed">
-                <div className="wrapper container-fluid p-0">
-                    <Navigation />
-                    <MainSidebar />
-                    <div className="content-wrapper">
-                        <Outlet />
+            <Header />
+            <Sidebar />
+            <main className="app-content">
+                <div className="row">
+                    <div className="col-md-12">
+                        <div className="app-title">
+                            <ul className="app-breadcrumb breadcrumb">
+                                <li className="breadcrumb-item">
+                                    <BreadcrumbItem />
+                                </li>
+                            </ul>
+                            <div id="clock"></div>
+                        </div>
                     </div>
-                    <MainFooter />
-                    <ToastContainer
-                        position="top-right"
-                        autoClose={5000}
-                        hideProgressBar={false}
-                        newestOnTop={true}
-                        closeOnClick
-                        rtl={false}
-                        pauseOnFocusLoss
-                        draggable
-                        pauseOnHover
-                        theme="light"
-                        style={{ width: "400px" }}
-                    />
                 </div>
-            </div>
+                <Outlet />
+            </main>
         </>
     );
 }

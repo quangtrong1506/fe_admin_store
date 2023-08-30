@@ -1,16 +1,14 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const navigationSlice = createSlice({
     name: 'navigation',
-    initialState: {
-        isCollapseMainSideBar: false,
-    },
+    initialState: [],
     reducers: {
-        collapseMainSidebar: (state, action) => {
-            state.isCollapseMainSideBar = action.payload;
-        }
-    }
-})
+        setNavigationValue: (_state, action) => {
+            return action.payload;
+        },
+    },
+});
 
-export const { collapseMainSidebar } = navigationSlice.actions;
+export const { setNavigationValue } = navigationSlice.actions;
 export default navigationSlice.reducer;

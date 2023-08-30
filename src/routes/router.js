@@ -1,22 +1,16 @@
-import {createBrowserRouter} from "react-router-dom";
-import Layout from "../pages/layout";
-import ErrorPage from "../pages/error-page";
-import UserIndex from "../pages/users";
-import UserCreate from "../pages/users/create";
-import UserEdit from "../pages/users/edit";
-import Login from "../pages/auth/login";
-import Index from "../pages";
-import React from "react";
-import AuthLayout from "../pages/auth/authLayout";
-import ChangePassword from "../pages/auth/changePassword";
-import ProfileIndex from "../pages/profile";
-import Payment from "../pages/payments/payment";
-import PaymentSuccess from "../pages/payments/paymentSuccess";
-import Chat from "../pages/chat/chat";
+import React from 'react';
+import { createBrowserRouter } from 'react-router-dom';
+import EmployeeManager from '../pages/employee/';
+import ErrorPage from '../pages/error-page';
+import Index from '../pages/index';
+import Layout from '../pages/layout';
+import ProductIndex from '../pages/products';
+import ProductForm from '../pages/products/elements/forms';
+import UserIndex from '../pages/users';
 
 const router = createBrowserRouter([
     {
-        path: "/",
+        path: '/',
         element: <Layout />,
         errorElement: <ErrorPage />,
         children: [
@@ -25,69 +19,26 @@ const router = createBrowserRouter([
                 element: <Index />,
             },
             {
-                path: "users",
-                children: [
-                    {
-                        index: true,
-                        element: <UserIndex />,
-                    },
-                    {
-                        path: "create",
-                        element: <UserCreate />,
-                    },
-                    {
-                        path: ":userId/edit",
-                        element: <UserEdit />,
-                    },
-                ]
+                path: '/employee-manager',
+                element: <EmployeeManager />,
             },
             {
-                path: 'payments',
-                children: [
-                    {
-                        index: true,
-                        element: <Payment />,
-                    },
-                    {
-                        path: "success",
-                        element: <PaymentSuccess />,
-                    }
-                ],
+                path: '/users',
+                element: <UserIndex />,
             },
             {
-                path: "profile",
-                children: [
-                    {
-                        index: true,
-                        element: <ProfileIndex />
-                    }
-                ]
+                path: '/products',
+                element: <ProductIndex />,
             },
             {
-                path: 'chat',
-                children: [
-                    {
-                        index: true,
-                        element: <Chat />,
-                    },
-                ],
-            }
-        ]
+                path: '/products/new',
+                element: <ProductForm />,
+            },
+            {
+                path: '/products/:id',
+                element: <ProductForm />,
+            },
+        ],
     },
-    {
-        path: "/",
-        element: <AuthLayout />,
-        errorElement: <ErrorPage />,
-        children: [
-            {
-                path: "/login",
-                element: <Login />,
-            },
-            {
-                path: "/confirm-account",
-                element: <ChangePassword />,
-            }
-        ]
-    }
 ]);
 export default router;
