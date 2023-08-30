@@ -8,8 +8,7 @@ import { FaTimes } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import imgbbApis from '../../../api/baseAdmin/imgbb';
-import { stringToSlug } from '../../../helpers/common';
+import { stringToSlug, uploadImage } from '../../../helpers/common';
 
 const MySwal = withReactContent(Swal);
 const ProductForm = () => {
@@ -33,6 +32,7 @@ const ProductForm = () => {
         );
     }, [dispatch, id]);
     const [images, setImages] = useState([]);
+
     const description = useRef('');
     const handleDiscountChange = (e) => {
         const value = e.target.value;
@@ -68,50 +68,82 @@ const ProductForm = () => {
     };
     const submitHandle = async (value) => {
         console.log(value);
-        // if (value.status == -1) {
-        //     setError('status', { message: 'Danh mục chưa được lựa chọn' });
-        // }
-        // if (value.category == -1)
-        //     setError('category', {
-        //         message: 'Trạng thái của sản phẩm chưa được lựa chọn',
-        //     });
-        // if (value.brand == -1)
-        //     setError('brand', { message: 'Hãng của chưa được lựa chọn' });
-        // if (images.length === 0)
-        //     setError('images', { message: 'Chưa chọn ảnh của sản phẩm' });
-        // if (
-        //     value.status == -1 ||
-        //     value.category == -1 ||
-        //     value.brand == -1 ||
-        //     images.length == 0 ||
-        //     description.current === ''
-        // )
-        //     return MySwal.fire('', 'Vui lòng nhập đầy đủ thông tin', 'warning');
-        // else {
-        const formData = new FormData();
-        formData.append('name', value?.name ?? '');
-        formData.append('price', parseFloat(value?.price) ?? 0);
-        formData.append('discount', parseFloat(value?.discount) ?? 0);
-        formData.append('quantity', parseFloat(value?.quantity) ?? 0);
-        formData.append('brand', value?.brand ?? '');
-        formData.append('category', value?.category ?? '');
-        formData.append('status', value?.status ?? '');
-        const imagesUpload = [];
-        // images / desc
-        await Promise.all(
-            images.map(async (image) => {
-                const res = await imgbbApis.upload(image, {
-                    name: stringToSlug(value.name),
-                });
-                console.log(res);
-                imagesUpload.push(res.data);
-            })
-        );
-        console.log(imagesUpload);
-        // }
+        if (value.status == -1) {
+            setError('status', { message: 'Danh mục chưa được lựa chọn' });
+        }
+        if (value.category == -1)
+            setError('category', {
+                message: 'Trạng thái của sản phẩm chưa được lựa chọn',
+            });
+        if (value.brand == -1)
+            setError('brand', { message: 'Hãng của chưa được lựa chọn' });
+        if (
+            value.status == -1 ||
+            value.category == -1 ||
+            value.brand == -1 ||
+            images.length == 0
+            // ||
+            // description.current === ''
+        )
+            return MySwal.fire('', 'Vui lòng nhập đầy đủ thông tin', 'warning');
+        else {
+            progressUploading(true, 0);
+            const formData = new FormData();
+            formData.append('name', value?.name ?? '');
+            formData.append('price', parseFloat(value?.price) ?? 0);
+            formData.append('discount', parseFloat(value?.discount) ?? 0);
+            formData.append('quantity', parseFloat(value?.quantity) ?? 0);
+            formData.append('brand', value?.brand ?? '');
+            formData.append('category', value?.category ?? '');
+            formData.append('status', value?.status ?? '');
+            const imagesUpload = [];
+            // images / desc
+            let count = 1;
+            await Promise.all(
+                images.map(async (image, index) => {
+                    const res = await uploadImage(image.data, {
+                        name: stringToSlug(value.name),
+                    });
+                    count++;
+                    progressUploading(
+                        true,
+                        Math.floor((count / images.length) * 100)
+                    );
+                    imagesUpload.push(res.data.display_url);
+                })
+            );
+            progressUploading(false);
+            formData.append('images', imagesUpload);
+        }
+    };
+    const progressUploading = (isLoading = false, progress = 0) => {
+        document.querySelector('.products.uploading').style.display = isLoading
+            ? 'flex'
+            : 'none';
+        document.querySelector('.products .progress-bar').style.width =
+            progress + '%';
+        document.querySelector('.products .progress-bar').innerHTML =
+            progress + '%';
     };
     return (
         <>
+            <div className="products uploading">
+                <h4 style={{ textAlign: 'center', color: 'white' }}>
+                    Đang upload hình ảnh
+                </h4>
+                <div className="progress" style={{ width: '90%' }}>
+                    <div
+                        className="progress-bar progress-bar-striped progress-bar-animated"
+                        role="progressbar"
+                        style={{ width: '5%' }}
+                        aria-valuenow="25"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                    >
+                        5%
+                    </div>
+                </div>
+            </div>
             <div className="row products">
                 <div className="col-md-12">
                     <div className="tile">
@@ -382,11 +414,6 @@ const ProductForm = () => {
                                             </label>
                                         </div>
                                     </div>
-                                    {errors.images && (
-                                        <i className="text-danger">
-                                            {errors.images.message}
-                                        </i>
-                                    )}
                                 </div>
                                 <div className="form-group col-md-12">
                                     <label className="control-label">

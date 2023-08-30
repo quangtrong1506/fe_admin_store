@@ -78,3 +78,19 @@
 .products .list-images .list-images__item:hover .set-thumbnail--btn {
     display: inline-block;
 }
+.uploading {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 10000;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+.uploading > * {
+    width: 100%;
+}

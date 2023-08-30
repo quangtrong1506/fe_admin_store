@@ -47,3 +47,23 @@ export const stringToSlug = (str) => {
 
     return str;
 };
+export const uploadImage = async (image, option = {}) => {
+    const data = new FormData();
+    data.append('image', image);
+    let params = '?key=' + process.env.REACT_APP_IMGBB_KEY;
+    if (option.name) params += '&name=';
+
+    var requestOptions = {
+        method: 'POST',
+        body: data,
+        redirect: 'follow',
+    };
+
+    const res = await fetch(
+        process.env.REACT_APP_IMGBB_DOMAIN + params,
+        requestOptions
+    );
+    const result = await res.json();
+    console.log(result);
+    return result;
+};
