@@ -79,14 +79,14 @@ const ProductForm = () => {
             setError('brand', { message: 'Hãng của chưa được lựa chọn' });
         if (images.length === 0)
             setError('images', { message: 'Chưa chọn ảnh của sản phẩm' });
-        if (
-            value.status == -1 ||
-            value.category == -1 ||
-            value.brand == -1 ||
-            images.length == 0 ||
-            description.current === ''
-        )
-            return MySwal.fire('', 'Vui lòng nhập đầy đủ thông tin', 'warning');
+        // if (
+        //     value.status == -1 ||
+        //     value.category == -1 ||
+        //     value.brand == -1 ||
+        //     images.length == 0 ||
+        //     description.current === ''
+        // )
+        //     return MySwal.fire('', 'Vui lòng nhập đầy đủ thông tin', 'warning');
         else {
             const formData = new FormData();
             formData.append('name', value?.name ?? '');
