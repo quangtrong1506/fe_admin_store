@@ -1,11 +1,11 @@
-import { Editor } from './ckeditor-custom/build/ckeditor';
+// import { Editor } from './ckeditor-custom/build/ckeditor';
 // const Editor = require('./ckeditor-custom/build/ckeditor');
-import { CKEditor } from '@ckeditor/ckeditor5-react';
+// import { CKEditor } from '@ckeditor/ckeditor5-react';
 export default function CustomCKeditor({ data, handleData = () => {} }) {
     return (
         <>
-            <div id="editor">hi</div>
-            <CKEditor
+            <div>hi</div>
+            {/* <CKEditor
                 editor={Editor}
                 data={data}
                 onReady={(editor) => {
@@ -14,7 +14,7 @@ export default function CustomCKeditor({ data, handleData = () => {} }) {
                 onChange={(event, editor) => {
                     handleData(editor.data.get());
                 }}
-            />
+            /> */}
         </>
     );
 }

@@ -7,11 +7,13 @@ const imgbbApis = {
         let params = '?key=' + process.env.REACT_APP_IMGBB_KEY;
         if (option.name) params += '&name=';
         return imgbbAxios.post(params, image, {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods':
-                'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers':
-                'Origin, Content-Type, X-Auth-Token',
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods':
+                    'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers':
+                    'Origin, Content-Type, X-Auth-Token',
+            },
         });
     },
 };
