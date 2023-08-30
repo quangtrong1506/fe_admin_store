@@ -4,7 +4,7 @@ export default function CustomCKeditor({ data, handleData = () => {} }) {
     return (
         <>
             <CKEditor
-                editor={Editor}
+                editor={Editor.default}
                 data={data}
                 onReady={(editor) => {
                     handleData(editor.data.get());
