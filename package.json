@@ -7,6 +7,7 @@
         "@ckeditor/ckeditor5-autoformat": "^39.0.1",
         "@ckeditor/ckeditor5-basic-styles": "^39.0.1",
         "@ckeditor/ckeditor5-block-quote": "^39.0.1",
+        "@ckeditor/ckeditor5-build-classic": "^39.0.1",
         "@ckeditor/ckeditor5-editor-classic": "^39.0.1",
         "@ckeditor/ckeditor5-essentials": "^39.0.1",
         "@ckeditor/ckeditor5-find-and-replace": "^39.0.1",

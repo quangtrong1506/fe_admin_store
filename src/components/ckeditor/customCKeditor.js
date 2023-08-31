@@ -1,13 +1,12 @@
-import * as editor from './ckeditor-custom/build/ckeditor.js';
-// const Editor = require('./ckeditor-custom/src/ckeditor');
+// import Editor from './ckeditor-custom/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 export default function CustomCKeditor({ data, handleData = () => {} }) {
-    // console.log(Editor);
-    // console.log(typeof Editor);
     return (
         <>
             <CKEditor
-                editor={editor}
+                editor={ClassicEditor}
                 data={data}
                 onReady={(editor) => {
                     handleData(editor.data.get());
