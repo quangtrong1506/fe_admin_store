@@ -1,4 +1,4 @@
-import Editor from '@ckeditor/ckeditor-custom/build/ckeditor';
+import Editor from '@quangtrong1506/ckeditor-custom/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
