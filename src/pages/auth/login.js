@@ -1,83 +1,76 @@
-import {useForm} from "react-hook-form";
-import authApis from "../../api/baseAdmin/auth";
-import {useCookies} from "react-cookie";
-import {useNavigate} from "react-router-dom";
-import moment from "moment";
+import { useForm } from 'react-hook-form';
+import authApis from '../../api/baseAdmin/auth';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import { showToast } from '../../helpers/showToast';
 
 export default function Login() {
     const {
         register,
         handleSubmit,
-        formState: {errors},
-        setError
+        formState: { errors },
+        setError,
     } = useForm();
     let navigate = useNavigate();
-    const [cookies, setCookie] = useCookies(['user_token']);
+    const [cookies, setCookie] = useCookies(['admin_token']);
     const login = async (data) => {
+        console.log(data);
         const loginResponse = await authApis.login(data);
-
         if (loginResponse.success) {
-            setCookie('user_token', loginResponse.data.user_token, { path: '/' , expires: moment().add(1, 'months').toDate()})
+            setCookie('admin_token', loginResponse.data.token, {
+                path: '/',
+                expires: moment().add(1, 'months').toDate(),
+            });
             navigate('/');
-
             return;
         }
-        loginResponse.errors.forEach((error) => {
-            const [key, value] = Object.entries(error)[0]
-            setError(key, {
-                type: 'server',
-                message: value.message
-            })
-        })
-    }
+        showToast({ message: loginResponse.message, type: 'error' });
+    };
 
     return (
         <>
-            <form className={"pb-3"} onSubmit={handleSubmit(login)}>
+            <form className={'pb-3'} onSubmit={handleSubmit(login)}>
                 <div className="mb-3">
-                    <label htmlFor="inputPhone" className="form-label">Số điện thoại</label>
+                    <label htmlFor="inputPhone" className="form-label">
+                        Email
+                    </label>
                     <input
                         type="text"
                         className="form-control"
                         id="inputPhone"
-                        {...register('phone', {
-                            required:'Số điện thoại không được để trống',
-                            maxLength: {
-                                value: 11,
-                                message: "Số điện thoại không được lớn hơn 11 ký tự"
-                            },
-                            minLength: {
-                                value: 10,
-                                message: "Số điện thoại không được ít hơn 10 ký tự"
-                            }
+                        {...register('email', {
+                            required: 'Email không được để trống',
                         })}
                     />
-                    {errors.phone && <p className={'text-danger fw-bold'}>{errors.phone.message}</p>}
+                    {errors.email && (
+                        <p className={'text-danger fw-bold'}>
+                            {errors.email.message}
+                        </p>
+                    )}
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="inputPassword" className="form-label">Mật khẩu</label>
+                    <label htmlFor="inputPassword" className="form-label">
+                        Mật khẩu
+                    </label>
                     <input
                         type="password"
                         className="form-control"
                         id="inputPassword"
-                        {
-                            ...register('password', {
-                                required: 'Mật khẩu không được để trống',
-                                maxLength: {
-                                    value: 20,
-                                    message: "Mật khẩu không được lớn hơn 20 ký tự"
-                                },
-                                minLength: {
-                                    value: 6,
-                                    message: "Mật khẩu không được ít hơn 6 ký tự"
-                                }
-                            })
-                        }
+                        {...register('password', {
+                            required: 'Mật khẩu không được để trống',
+                        })}
                     />
-                    {errors.password && <p className={'text-danger fw-bold'}>{errors.password.message}</p>}
+                    {errors.password && (
+                        <p className={'text-danger fw-bold'}>
+                            {errors.password.message}
+                        </p>
+                    )}
                 </div>
                 <div className={'text-center'}>
-                    <button type="submit" className="btn btn-primary">Đăng nhập</button>
+                    <button type="submit" className="btn btn-primary">
+                        Đăng nhập
+                    </button>
                 </div>
             </form>
         </>

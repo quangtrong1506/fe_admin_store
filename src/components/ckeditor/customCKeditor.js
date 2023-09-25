@@ -1,6 +1,5 @@
 import Editor from '@quangtrong1506/ckeditor-custom/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 export default function CustomCKeditor({ data, handleData = () => {} }) {
     return (

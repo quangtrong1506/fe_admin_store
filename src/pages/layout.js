@@ -1,13 +1,28 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { Link, Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import authApis from '../api/baseAdmin/auth';
+import brandApis from '../api/baseAdmin/brand';
+import categoryApis from '../api/baseAdmin/category';
 import '../assets/css/more.css';
 import '../assets/css/style.css';
 import Header from '../components/_common/header/header';
 import Sidebar from '../components/_common/sidebar/sidebar';
-
+import { createAuthUser } from '../features/auth/authSlice';
+import { setBrand } from '../features/brand/brandSlice';
+import { setCategory } from '../features/category/categorySlice';
+import { scrollToTop } from '../helpers/common';
+import { showToast } from '../helpers/showToast';
+import socketio from '../plugins/socketio';
 export default function Layout() {
+    const dispatch = useDispatch();
+    const [cookies, setCookie] = useCookies(['admin_token']);
+    const [socket, setSocket] = useState(null);
+
     function time() {
         var today = new Date();
         var weekday = new Array(7);
@@ -46,9 +61,62 @@ export default function Layout() {
         }
     }
     useEffect(() => {
+        if (!cookies.admin_token) {
+            navigate('/login');
+        }
         setInterval(time, 1000);
+        (async () => {
+            const resCats = await categoryApis.index();
+            if (resCats.success) dispatch(setCategory(resCats.data));
+            else
+                showToast({
+                    message:
+                        'Không thể load danh mục vui lòng reload lại trang',
+                });
+            const resBrand = await brandApis.index();
+            if (resBrand.success) dispatch(setBrand(resBrand.data));
+            else
+                showToast({
+                    message:
+                        'Không thể load hãng sản phẩm vui lòng reload lại trang',
+                });
+            // Thông tin đã đăng nhập
+            const adminInfo = await authApis.myInfo();
+            dispatch(createAuthUser(adminInfo.data));
+        })();
+
+        const newSocket = socketio('admin');
+        setSocket(newSocket);
     }, []);
     const navigation = useSelector((state) => state.navigation);
+    const location = useLocation();
+    useEffect(() => {
+        scrollToTop();
+    }, [location]);
+    useEffect(() => {
+        document.title = navigation[navigation.length - 1]?.title;
+    }, [navigation]);
+    useEffect(() => {
+        if (socket === null) return;
+        socket.on('get-notification', (data) => {
+            console.log(data);
+            if (data.type === 1 && window.location.pathname === '/chat') return;
+            let link = '/';
+            if (data.type === 1) link = '/chat';
+            if (data.type === 2) link = '/orders';
+            toast.info(
+                <div className="custom-toast-message">
+                    <h6>{data.title}</h6>
+                    <span className="content">{data.body}</span>
+                    <br />
+                    <Link to={link}>Xem chi tiết</Link>
+                </div>
+            );
+        });
+        return () => {
+            socket.off('get-notification');
+        };
+    }, [socket]);
     const BreadcrumbItem = () => {
         if (navigation) {
             return navigation.map((element, index) => {
@@ -83,6 +151,18 @@ export default function Layout() {
                 </div>
                 <Outlet />
             </main>
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
         </>
     );
 }

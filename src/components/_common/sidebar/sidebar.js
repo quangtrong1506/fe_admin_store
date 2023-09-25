@@ -1,4 +1,5 @@
 import { memo, useEffect } from 'react';
+import { FaComments } from 'react-icons/fa';
 import {
     FaCartShopping,
     FaCity,
@@ -8,9 +9,12 @@ import {
     FaTachographDigital,
     FaUser,
 } from 'react-icons/fa6';
+import { useSelector } from 'react-redux';
 import { Link, useSearchParams } from 'react-router-dom';
-const Header = () => {
+import { getOffice } from '../../../helpers/common';
+const Sidebar = () => {
     const searchParams = useSearchParams();
+    const user = useSelector((state) => state.auth.user);
     const handleClick = (e) => {
         e.preventDefault();
         const sidebar = document.querySelector('.app-sidebar');
@@ -57,16 +61,16 @@ const Header = () => {
                 <div className="app-sidebar__user">
                     <img
                         className="app-sidebar__user-avatar"
-                        src="https://i.ibb.co/3ByWSCH/5c751961ebe106bf5ff0.jpg"
+                        src={user?.avatar}
                         width="50px"
                         alt="..."
                     />
                     <div>
                         <p className="app-sidebar__user-name">
-                            <b>Trọng sa đoạ</b>
+                            <b>{user?.name}</b>
                         </p>
                         <p className="app-sidebar__user-designation">
-                            Chức vụ: Quản trị viên
+                            Chức vụ: {getOffice(user?.role)}
                         </p>
                     </div>
                 </div>
@@ -130,26 +134,20 @@ const Header = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link
-                            className="app-menu__item"
-                            to="/admin/quan-ly-nha-cung-cap"
-                        >
+                        <Link className="app-menu__item" to="/brand">
                             <FaCity className="app-menu__icon bx" />
                             <span className="app-menu__label">
-                                Quản lý nhà cung cấp
+                                Quản lý nhãn hàng
                             </span>
                         </Link>
                     </li>
                     <li>
-                        <a
-                            className="app-menu__item"
-                            href="/admin/quan-ly-danh-muc"
-                        >
+                        <Link className="app-menu__item" to="/category">
                             <FaFolderTree className="app-menu__icon bx" />
                             <span className="app-menu__label">
                                 Quản lý danh mục
                             </span>
-                        </a>
+                        </Link>
                     </li>
                     <li>
                         <a
@@ -162,10 +160,16 @@ const Header = () => {
                             </span>
                         </a>
                     </li>
+                    <li>
+                        <Link className="app-menu__item" to="/chat">
+                            <FaComments className="app-menu__icon bx" />
+                            <span className="app-menu__label">Chat</span>
+                        </Link>
+                    </li>
                 </ul>
             </aside>
             <div className="app-sidebar-overlay" onClick={handleClick}></div>
         </>
     );
 };
-export default memo(Header);
+export default memo(Sidebar);

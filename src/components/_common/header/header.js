@@ -1,7 +1,9 @@
 import { memo } from 'react';
 import { FaArrowRightFromBracket, FaBars } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 const Header = () => {
+    const [cookies, setCookie, removeCookie] = useCookies([]);
     const handleClick = (e) => {
         e.preventDefault();
         const sidebar = document.querySelector('.app-sidebar');
@@ -14,6 +16,11 @@ const Header = () => {
             sidebar.style.left = '0px';
             overlay.style.display = 'block';
         }
+    };
+    const logout = (e) => {
+        e.preventDefault();
+        removeCookie('admin_token');
+        window.location.reload();
     };
     return (
         <>
@@ -37,7 +44,11 @@ const Header = () => {
                 </Link>
                 <ul className="app-nav">
                     <li>
-                        <Link className="app-nav__item" to="/logout">
+                        <Link
+                            className="app-nav__item"
+                            to="/logout"
+                            onClick={logout}
+                        >
                             <FaArrowRightFromBracket className="bx-rotate-180" />
                         </Link>
                     </li>

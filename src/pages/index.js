@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import {
     FaBagShopping,
     FaDatabase,
@@ -6,11 +6,40 @@ import {
     FaUsers,
 } from 'react-icons/fa6';
 import { useDispatch } from 'react-redux';
+import orderApis from '../api/baseAdmin/order';
+import productApis from '../api/baseAdmin/product';
+import userApis from '../api/baseAdmin/user';
 import { setNavigationValue } from '../features/navigation/navigationSlice';
+import { getOrderStatus, numberToMoneyString } from '../helpers/common';
 const Index = () => {
     const dispatch = useDispatch();
+    const [countUser, setCountUser] = useState(0);
+    const [countProduct, setCountProduct] = useState(0);
+    const [countOrder, setCountOrder] = useState(0);
+    const [countProductWarning, setCountProductWarning] = useState(0);
+    const [newestOrders, setNewestOrders] = useState([]);
+    const [newestUsers, setNewestUsers] = useState([]);
     useEffect(() => {
         dispatch(setNavigationValue([{ url: '/', title: 'Bảng điều khiểu' }]));
+        const loadData = async () => {
+            Promise.all([
+                userApis.count(),
+                productApis.count(),
+                orderApis.count(),
+                productApis.countWarning(),
+                orderApis.index({ limit: 5 }),
+                userApis.index({ limit: 5 }),
+            ]).then((value) => {
+                console.log(value);
+                setCountUser(value[0].data ?? 0);
+                setCountProduct(value[1].data ?? 0);
+                setCountOrder(value[2].data ?? 0);
+                setCountProductWarning(value[3].data ?? 0);
+                setNewestOrders(value[4].data?.docs ?? []);
+                setNewestUsers(value[5].data?.docs ?? []);
+            });
+        };
+        loadData();
     }, []);
     return (
         <>
@@ -28,7 +57,7 @@ const Index = () => {
                                 <div className="info">
                                     <h4>Tổng khách hàng</h4>
                                     <p>
-                                        <b>2 khách hàng</b>
+                                        <b>{countUser} khách hàng</b>
                                     </p>
                                     <p className="info-tong">
                                         Tổng số khách hàng được quản lý.
@@ -44,7 +73,7 @@ const Index = () => {
                                 <div className="info">
                                     <h4>Tổng sản phẩm</h4>
                                     <p>
-                                        <b>2 sản phẩm</b>
+                                        <b>{countProduct} sản phẩm</b>
                                     </p>
                                     <p className="info-tong">
                                         Tổng số sản phẩm được quản lý.
@@ -60,7 +89,7 @@ const Index = () => {
                                 <div className="info">
                                     <h4>Tổng đơn hàng</h4>
                                     <p>
-                                        <b>2 đơn hàng</b>
+                                        <b>{countOrder} đơn hàng</b>
                                     </p>
                                     <p className="info-tong">
                                         Tổng số hóa đơn đã bán.
@@ -76,7 +105,7 @@ const Index = () => {
                                 <div className="info">
                                     <h4>Sắp hết hàng</h4>
                                     <p>
-                                        <b>1 sản phẩm</b>
+                                        <b>{countProductWarning} sản phẩm</b>
                                     </p>
                                     <p className="info-tong">
                                         Số sản phẩm cảnh báo hết cần nhập thêm.
@@ -98,26 +127,31 @@ const Index = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>#rlzv3tiZ</td>
-                                                <td>Lương Quang Trọng</td>
-                                                <td>1.131.567&nbsp;₫</td>
-                                                <td>
-                                                    <span className="badge bg-info">
-                                                        Chờ xác nhận
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>#fcx8tGa2</td>
-                                                <td>lương quang trọng</td>
-                                                <td>1.131.456&nbsp;₫</td>
-                                                <td>
-                                                    <span className="badge bg-success">
-                                                        Hoàn thành
-                                                    </span>
-                                                </td>
-                                            </tr>
+                                            {newestOrders.map(
+                                                (order, index) => (
+                                                    <tr key={index}>
+                                                        <td>#{order._id}</td>
+                                                        <td>
+                                                            {
+                                                                order.user_info
+                                                                    .name
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            {numberToMoneyString(
+                                                                order.payment
+                                                                    .total
+                                                            )}
+                                                        </td>
+                                                        <td>
+                                                            {getOrderStatus(
+                                                                order.status
+                                                                    .status_code
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            )}
                                         </tbody>
                                     </table>
                                 </div>
@@ -137,28 +171,18 @@ const Index = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>#1c9u78Cf</td>
-                                                <td>Lương Quang Trọng</td>
-                                                <td>
-                                                    quangtrong1506@gmail.com
-                                                </td>
-                                                <td>
-                                                    <span className="tag tag-success">
-                                                        0389619050
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>#Qj0Y4vMQ</td>
-                                                <td>lương quang trọng</td>
-                                                <td>quangtrong2@gmail.com</td>
-                                                <td>
-                                                    <span className="tag tag-success">
-                                                        089619050
-                                                    </span>
-                                                </td>
-                                            </tr>
+                                            {newestUsers.map((user) => (
+                                                <tr key={user._id}>
+                                                    <td>#{user._id}</td>
+                                                    <td>{user.name}</td>
+                                                    <td>{user.email}</td>
+                                                    <td>
+                                                        <span className="tag tag-success">
+                                                            {user.phone}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            ))}
                                         </tbody>
                                     </table>
                                 </div>

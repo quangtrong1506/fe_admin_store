@@ -4,21 +4,18 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import ProductTable from '../../components/_common/product/productTable';
-
+import OrderTable from '../../components/_common/order/orderTable';
 import { setNavigationValue } from '../../features/navigation/navigationSlice';
 import { useQuery } from '../../helpers/common';
 const MySwal = withReactContent(Swal);
-export default function ProductIndex() {
+export default function OrderIndex() {
     const dispatch = useDispatch();
     const [page, setPage] = useState(1);
     const [searchText, setSearchText] = useState('');
     const query = useQuery();
     useEffect(() => {
         dispatch(
-            setNavigationValue([
-                { url: '/products', title: 'Quản lý sản phẩm' },
-            ])
+            setNavigationValue([{ url: '/Orders', title: 'Quản lý đơn hàng' }])
         );
     }, [dispatch]);
     useEffect(() => {
@@ -35,11 +32,11 @@ export default function ProductIndex() {
                                 <div className="col-md-9 col-sm-6 col-12">
                                     <Link
                                         className="btn btn-add btn-sm"
-                                        to="/products/new"
+                                        to="/orders/new"
                                         title="Thêm"
                                     >
-                                        <FaPlus className="icon fa" /> Thêm sản
-                                        phẩm
+                                        <FaPlus className="icon fa" /> Thêm đơn
+                                        hàng mới
                                     </Link>
                                 </div>
                                 <div className="col-md-3 col-sm-6 col-12">
@@ -54,7 +51,7 @@ export default function ProductIndex() {
                                     />
                                 </div>
                             </div>
-                            <ProductTable
+                            <OrderTable
                                 page={page}
                                 setPage={setPage}
                                 searchText={searchText}

@@ -1,4 +1,4 @@
-.users-table .avatar img {
+.table .avatar img {
     max-width: 80px;
     object-fit: contain;
 }
@@ -57,7 +57,7 @@
 }
 .products .list-images .list-images__item .close--btn {
     position: absolute;
-    right: 15px;
+    right: 0;
     color: red;
     font-size: 20px;
 }
@@ -78,13 +78,17 @@
 .products .list-images .list-images__item:hover .set-thumbnail--btn {
     display: inline-block;
 }
+.products .list-images .list-images__image {
+    /* height: 100%; */
+    position: relative;
+}
 .uploading {
     position: fixed;
     top: 0;
     bottom: 0;
     right: 0;
     left: 0;
-    z-index: 10000;
+    z-index: 10;
     background-color: rgba(0, 0, 0, 0.7);
     display: none;
     justify-content: center;
@@ -93,4 +97,25 @@
 }
 .uploading > * {
     width: 100%;
+}
+.modal-dialog .button-grid {
+    display: flex;
+    justify-content: flex-end;
+}
+.modal-dialog .on-modal {
+    max-height: 300px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.products .react-select {
+    height: 50px;
+}
+.fa-icon {
+    margin-top: -3px;
+}
+.custom-toast-message h6 {
+    color: black !important;
+}
+.custom-toast-message span.content {
+    color: rgb(97, 97, 97) !important;
 }

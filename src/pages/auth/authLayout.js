@@ -1,25 +1,33 @@
-import {useCookies} from "react-cookie";
-import {Outlet, useNavigate} from "react-router-dom";
-import {useEffect} from "react";
-import {ToastContainer} from "react-toastify";
-
+import { useCookies } from 'react-cookie';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import '../../assets/scss/index.scss';
 export default function AuthLayout() {
     let navigate = useNavigate();
     const [cookies] = useCookies();
 
     useEffect(() => {
-        if (cookies.user_token) {
+        if (cookies.admin_token) {
             navigate('/');
         }
     }, []);
 
     return (
         <>
-            <div className={'container-fluid row login-page justify-content-center align-items-center'}>
+            <div
+                className={
+                    'container-fluid row login-page justify-content-center align-items-center'
+                }
+            >
                 <div className="card login-content p-0 bg-light">
                     <div className="card-body">
                         <div className={'text-center'}>
-                            <img src="/images/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image image-circle elevation-3"/>
+                            <img
+                                src="https://i.ibb.co/qrTSzF1/istockphoto-1192884194-612x612.jpg"
+                                alt="AdminLTE Logo"
+                                className="brand-image image-circle elevation-3"
+                            />
                         </div>
                         <Outlet />
                     </div>
@@ -36,7 +44,7 @@ export default function AuthLayout() {
                 draggable
                 pauseOnHover
                 theme="light"
-                style={{ width: "400px" }}
+                style={{ width: '400px' }}
             />
         </>
     );
