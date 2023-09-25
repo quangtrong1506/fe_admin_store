@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import authApis from '../api/baseAdmin/auth';
@@ -22,7 +22,7 @@ export default function Layout() {
     const dispatch = useDispatch();
     const [cookies, setCookie] = useCookies(['admin_token']);
     const [socket, setSocket] = useState(null);
-
+    const navigate = useNavigate();
     function time() {
         var today = new Date();
         var weekday = new Array(7);
