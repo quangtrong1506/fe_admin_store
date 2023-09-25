@@ -1,8 +1,8 @@
-import { useForm } from 'react-hook-form';
-import authApis from '../../api/baseAdmin/auth';
-import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import { useCookies } from 'react-cookie';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import authApis from '../../api/baseAdmin/auth';
 import { showToast } from '../../helpers/showToast';
 
 export default function Login() {
@@ -17,6 +17,7 @@ export default function Login() {
     const login = async (data) => {
         console.log(data);
         const loginResponse = await authApis.login(data);
+        console.log(loginResponse);
         if (loginResponse.success) {
             setCookie('admin_token', loginResponse.data.token, {
                 path: '/',
