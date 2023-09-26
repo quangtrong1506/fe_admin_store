@@ -1,20 +1,20 @@
 import { memo, useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { FaTimes } from 'react-icons/fa';
+import { FaCloudArrowUp } from 'react-icons/fa6';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import CustomCKeditor from '../../../components/ckeditor/customCKeditor';
-import { setNavigationValue } from '../../../features/navigation/navigationSlice';
-import { FaCloudArrowUp } from 'react-icons/fa6';
-import { FaTimes } from 'react-icons/fa';
-import { useForm } from 'react-hook-form';
+import Select from 'react-select';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { stringToSlug, uploadImage } from '../../../helpers/common';
-import CategoryModal from './categoryModal';
-import BrandModal from './brandModal';
 import productApis from '../../../api/baseAdmin/product';
-import { showToast } from '../../../helpers/showToast';
-import Select from 'react-select';
+import CustomCKeditor from '../../../components/ckeditor/customCKeditor';
+import { setNavigationValue } from '../../../features/navigation/navigationSlice';
+import { stringToSlug, uploadImage } from '../../../helpers/common';
 import { PRODUCT_STATUS } from '../../../helpers/constants';
+import { showToast } from '../../../helpers/showToast';
+import BrandModal from './brandModal';
+import CategoryModal from './categoryModal';
 
 const MySwal = withReactContent(Swal);
 const ProductForm = () => {
@@ -110,7 +110,6 @@ const ProductForm = () => {
                         status: product.status,
                     });
                 } else {
-                    console.log(res);
                     if (res.status === 404) {
                         showToast({ message: res.message, type: 'error' });
                         showToast({
@@ -257,9 +256,6 @@ const ProductForm = () => {
             };
             await forLoop();
             formData.append('images', JSON.stringify(imagesUpload));
-            for (var pair of formData.entries()) {
-                console.log(pair[0] + ', ' + pair[1]);
-            }
             let res = {};
             if (!id) res = await productApis.add(formData);
             else res = await productApis.update(id, formData);

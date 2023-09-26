@@ -150,15 +150,12 @@ const Sidebar = () => {
                         </Link>
                     </li>
                     <li>
-                        <a
-                            className="app-menu__item"
-                            href="/admin/quan-ly-bai-viet"
-                        >
+                        <Link className="app-menu__item" to="/posts">
                             <FaNewspaper className="app-menu__icon bx" />
                             <span className="app-menu__label">
                                 Quản lý bài viết
                             </span>
-                        </a>
+                        </Link>
                     </li>
                     <li>
                         <Link className="app-menu__item" to="/chat">

@@ -11,6 +11,8 @@ import ErrorPage from '../pages/error-page';
 import Index from '../pages/index';
 import Layout from '../pages/layout';
 import OrderIndex from '../pages/orders/orders';
+import PostsForm from '../pages/posts/forms';
+import PostsIndex from '../pages/posts/posts';
 import ProductIndex from '../pages/products';
 import ProductForm from '../pages/products/elements/forms';
 import UserIndex from '../pages/users';
@@ -65,6 +67,14 @@ const router = createBrowserRouter([
             {
                 path: '/chat',
                 children: [{ index: true, element: <Chat /> }],
+            },
+            {
+                path: '/posts',
+                children: [
+                    { index: true, element: <PostsIndex /> },
+                    { path: 'new', element: <PostsForm /> },
+                    { path: ':id', element: <PostsForm /> },
+                ],
             },
         ],
     },
